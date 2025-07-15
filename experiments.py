@@ -13,6 +13,8 @@ import tensorly as tl
 import h5py
 import mat73
 
+from decomp import *
+
 """
 
 1. Import real world tensor if using one. Skip to step 2 if using a simulated 

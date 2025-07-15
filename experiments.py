@@ -66,6 +66,9 @@ set fit_thresh as 0.01 less than the optimal fit and first_100_plot = False.
 """
 
 fit_thresh = 0.99 # The threshold fit for the algorithm to have 'converged'. Set as greater than 1 for convergence plots.
+generate_plot = True
+if generate_plot:
+    fit_thresh = 1.1
 #fit_thresh = 0.98
 nruns = 20 # Set number of runs (number of tensor decompositions for each method)
 simulated_tensor = True # Set as True if using simulated tensor; False if using a real tensor
@@ -409,57 +412,59 @@ for j in range(nruns):
 
 """
 
-# Get the mean fits as at each iter:
-mean_fits_als = np.mean(fits_als,axis=1)
-mean_fits_block_momentum = np.mean(fits_block_momentum,axis=1) 
-mean_fits_block_perturb = np.mean(fits_block_perturb,axis=1)
-mean_fits_block_both = np.mean(fits_block_both,axis=1)
-mean_fits_s1 = np.mean(fits_s1,axis=1) 
-mean_fits_her = np.mean(fits_her,axis=1)
-mean_fits_els = np.mean(fits_els, axis=1)
-mean_fits_ls = np.mean(fits_ls, axis=1)
+if generate_plot:
+    # Get the mean fits as at each iter:
+    mean_fits_als = np.mean(fits_als,axis=1)
+    mean_fits_block_momentum = np.mean(fits_block_momentum,axis=1) 
+    mean_fits_block_perturb = np.mean(fits_block_perturb,axis=1)
+    mean_fits_block_both = np.mean(fits_block_both,axis=1)
+    mean_fits_s1 = np.mean(fits_s1,axis=1) 
+    mean_fits_her = np.mean(fits_her,axis=1)
+    mean_fits_els = np.mean(fits_els, axis=1)
+    mean_fits_ls = np.mean(fits_ls, axis=1)
 
-# Compute associated standard errors:
-err_als = np.std(fits_als,axis=1)/np.sqrt(nruns)
-err_s1 = np.std(fits_s1,axis=1)/np.sqrt(nruns)
-err_block_both = np.std(fits_block_both,axis=1)/np.sqrt(nruns)
-err_block_momentum = np.std(fits_block_momentum,axis=1)/np.sqrt(nruns)
-err_block_perturb = np.std(fits_block_perturb,axis=1)/np.sqrt(nruns)
-err_her = np.std(fits_her,axis=1)/np.sqrt(nruns)
-err_els = np.std(fits_els,axis=1)/np.sqrt(nruns)
-err_ls = np.std(fits_ls,axis=1)/np.sqrt(nruns)
+    # Compute associated standard errors:
+    err_als = np.std(fits_als,axis=1)/np.sqrt(nruns)
+    err_s1 = np.std(fits_s1,axis=1)/np.sqrt(nruns)
+    err_block_both = np.std(fits_block_both,axis=1)/np.sqrt(nruns)
+    err_block_momentum = np.std(fits_block_momentum,axis=1)/np.sqrt(nruns)
+    err_block_perturb = np.std(fits_block_perturb,axis=1)/np.sqrt(nruns)
+    err_her = np.std(fits_her,axis=1)/np.sqrt(nruns)
+    err_els = np.std(fits_els,axis=1)/np.sqrt(nruns)
+    err_ls = np.std(fits_ls,axis=1)/np.sqrt(nruns)
 
-# Get the mean times as at each iter:
-mean_times_block_momentum = np.mean(times_block_momentum,axis=1)
-mean_times_block_perturb = np.mean(times_block_perturb,axis=1)
-mean_times_block_both = np.mean(times_block_both,axis=1)
-mean_times_als = np.mean(times_als,axis=1)
-mean_times_s1 = np.mean(times_s1,axis=1)
-mean_times_her = np.mean(times_her,axis=1)
-mean_times_els = np.mean(times_els,axis=1)
-mean_times_ls = np.mean(times_ls,axis=1)
+    # Get the mean times as at each iter:
+    mean_times_block_momentum = np.mean(times_block_momentum,axis=1)
+    mean_times_block_perturb = np.mean(times_block_perturb,axis=1)
+    mean_times_block_both = np.mean(times_block_both,axis=1)
+    mean_times_als = np.mean(times_als,axis=1)
+    mean_times_s1 = np.mean(times_s1,axis=1)
+    mean_times_her = np.mean(times_her,axis=1)
+    mean_times_els = np.mean(times_els,axis=1)
+    mean_times_ls = np.mean(times_ls,axis=1)
 
-# Get the cumulative times:
-cum_times_als = np.cumsum(mean_times_als)
-cum_times_s1 = np.cumsum(mean_times_s1)
-cum_times_block_momentum = np.cumsum(mean_times_block_momentum)
-cum_times_block_perturb = np.cumsum(mean_times_block_perturb)
-cum_times_block_both = np.cumsum(mean_times_block_both)
-cum_times_her = np.cumsum(mean_times_her)
-cum_times_els = np.cumsum(mean_times_els)
-cum_times_ls = np.cumsum(mean_times_ls)
+    # Get the cumulative times:
+    cum_times_als = np.cumsum(mean_times_als)
+    cum_times_s1 = np.cumsum(mean_times_s1)
+    cum_times_block_momentum = np.cumsum(mean_times_block_momentum)
+    cum_times_block_perturb = np.cumsum(mean_times_block_perturb)
+    cum_times_block_both = np.cumsum(mean_times_block_both)
+    cum_times_her = np.cumsum(mean_times_her)
+    cum_times_els = np.cumsum(mean_times_els)
+    cum_times_ls = np.cumsum(mean_times_ls)
 
-# Convergence plot by time with standard error bars:
-plt.errorbar(cum_times_block_both[1:len(cum_times_block_both)], mean_fits_block_both[1:len(mean_fits_block_both)], yerr=err_block_both[1:len(err_block_both)], c='orange', label='BA-ALS',errorevery=5)
-plt.errorbar(cum_times_block_momentum[1:len(cum_times_block_momentum)], mean_fits_block_momentum[1:len(mean_fits_block_momentum)], yerr=err_block_momentum[1:len(err_block_momentum)], c='red', label='BM-ALS', errorevery=5)
-plt.errorbar(cum_times_block_perturb[1:len(cum_times_block_perturb)], mean_fits_block_perturb[1:len(mean_fits_block_perturb)], yerr=err_block_perturb[1:len(err_block_perturb)], c='green', label='BP-ALS', errorevery=5)
-plt.errorbar(cum_times_s1[1:len(cum_times_s1)], mean_fits_s1[1:len(mean_fits_s1)], yerr=err_s1[1:len(err_s1)], c='purple', label='M-ALS',errorevery=5)
-plt.errorbar(cum_times_als[1:len(cum_times_als)], mean_fits_als[1:len(mean_fits_als)], yerr=err_als[1:len(err_als)], c='blue', label='ALS',errorevery=5)
-plt.errorbar(cum_times_her[1:len(cum_times_her)], mean_fits_her[1:len(mean_fits_her)], yerr=err_her[1:len(err_her)], c='black', label='herALS',errorevery=5)
-plt.errorbar(cum_times_els[1:len(cum_times_els)], mean_fits_els[1:len(mean_fits_els)], yerr=err_els[1:len(err_els)], c='pink', label='ELS',errorevery=5)
-plt.errorbar(cum_times_ls[1:len(cum_times_ls)], mean_fits_ls[1:len(mean_fits_ls)], yerr=err_ls[1:len(err_ls)], c='grey', label='LS',errorevery=5)
-pylab.legend(loc='lower right')
-plt.ylim([0.9, 0.96])
-plt.xlim([0, 80])
-plt.xlabel('Time (seconds)')
-plt.ylabel('Fit')
+    # Convergence plot by time with standard error bars:
+    plt.errorbar(cum_times_block_both[1:len(cum_times_block_both)], mean_fits_block_both[1:len(mean_fits_block_both)], yerr=err_block_both[1:len(err_block_both)], c='orange', label='BA-ALS',errorevery=5)
+    plt.errorbar(cum_times_block_momentum[1:len(cum_times_block_momentum)], mean_fits_block_momentum[1:len(mean_fits_block_momentum)], yerr=err_block_momentum[1:len(err_block_momentum)], c='red', label='BM-ALS', errorevery=5)
+    plt.errorbar(cum_times_block_perturb[1:len(cum_times_block_perturb)], mean_fits_block_perturb[1:len(mean_fits_block_perturb)], yerr=err_block_perturb[1:len(err_block_perturb)], c='green', label='BP-ALS', errorevery=5)
+    plt.errorbar(cum_times_s1[1:len(cum_times_s1)], mean_fits_s1[1:len(mean_fits_s1)], yerr=err_s1[1:len(err_s1)], c='purple', label='M-ALS',errorevery=5)
+    plt.errorbar(cum_times_als[1:len(cum_times_als)], mean_fits_als[1:len(mean_fits_als)], yerr=err_als[1:len(err_als)], c='blue', label='ALS',errorevery=5)
+    plt.errorbar(cum_times_her[1:len(cum_times_her)], mean_fits_her[1:len(mean_fits_her)], yerr=err_her[1:len(err_her)], c='black', label='herALS',errorevery=5)
+    plt.errorbar(cum_times_els[1:len(cum_times_els)], mean_fits_els[1:len(mean_fits_els)], yerr=err_els[1:len(err_els)], c='pink', label='ELS',errorevery=5)
+    plt.errorbar(cum_times_ls[1:len(cum_times_ls)], mean_fits_ls[1:len(mean_fits_ls)], yerr=err_ls[1:len(err_ls)], c='grey', label='LS',errorevery=5)
+    pylab.legend(loc='lower right')
+    #plt.ylim([0.9, 0.96])
+    #plt.xlim([0, 80])
+    plt.xlabel('Time (seconds)')
+    plt.ylabel('Fit')
+    plt.show()

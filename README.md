@@ -22,3 +22,6 @@ $ python experiments.py
 ```
 
 See the paper for the description of the algorithms. 
+An example convergence plot is shown below.
+
+![Convergence plot](convergence.png)

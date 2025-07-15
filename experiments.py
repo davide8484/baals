@@ -467,4 +467,5 @@ if generate_plot:
     #plt.xlim([0, 80])
     plt.xlabel('Time (seconds)')
     plt.ylabel('Fit')
+    plt.savefig('convergence.png')
     plt.show()
